@@ -1,4 +1,4 @@
-<h1> ResQ: Smart Disaster Relief Management System
+<p> ResQ: Smart Disaster Relief Management System
 ResQ is an advanced disaster relief management system designed to coordinate and streamline emergency response efforts during natural and man-made disasters. Built with real-time data integration, AI-powered analytics, and community engagement tools, ResQ serves as a centralized hub for government agencies, NGOs, first responders, and affected communities.
 
 🚨 Core Features:
@@ -30,4 +30,4 @@ Managing aid in refugee camps
 Wildfire evacuation planning and alerts
 
 🔒 Security & Resilience
-ResQ is designed with cybersecurity best practices, data encryption, and redundancy across cloud and edge servers, ensuring that the system stays online even when local infrastructure fails.</h1>
+ResQ is designed with cybersecurity best practices, data encryption, and redundancy across cloud and edge servers, ensuring that the system stays online even when local infrastructure fails.</p>
