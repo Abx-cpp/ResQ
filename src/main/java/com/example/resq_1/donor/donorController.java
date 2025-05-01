@@ -14,7 +14,8 @@ import com.example.resq_1.resource.resourceService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/donors")
+@RequestMapping("/api/donors")
+@CrossOrigin(origins = "http://localhost:5173")
 public class donorController {
 
     @Autowired

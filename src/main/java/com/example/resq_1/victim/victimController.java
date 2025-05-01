@@ -8,7 +8,8 @@ import com.example.resq_1.aid.aidService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/victims")
+@RequestMapping("/api/victims")
+@CrossOrigin(origins = "http://localhost:5173")
 public class victimController {
 
     @Autowired

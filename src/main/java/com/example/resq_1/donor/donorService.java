@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.resq_1.donation.donation;
 import com.example.resq_1.donation.donationrepository;
-
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,4 +45,9 @@ public class donorService {
         }
         return Optional.empty();
     }
+
+    public List<donor> getAllDonors() {
+        return donorRepository.findAll();  // assuming you're using Spring Data JPA
+    }
+
 }

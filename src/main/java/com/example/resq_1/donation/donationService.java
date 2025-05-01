@@ -4,20 +4,25 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.example.resq_1.aid.aid;
+import com.example.resq_1.aid.aidrepository;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 
 @Service
 public class donationService {
 
     @Autowired
     private donationrepository donationRepository;
-
+    @Autowired
+    private aidrepository aidRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -65,30 +70,59 @@ public class donationService {
         return response;
     }
 
-    // Get last 6 months donation comparison
     public List<Map<String, Object>> getLast6MonthsDonationComparison() {
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        // Step 1: Generate last 6 months
+        YearMonth current = YearMonth.now();
+        List<YearMonth> last6Months = new ArrayList<>();
+        for (int i = 5; i >= 0; i--) {
+            last6Months.add(current.minusMonths(i));
+        }
+
+        // Step 2: Query donation counts grouped by year and month
         String query = "SELECT EXTRACT(YEAR FROM donation_date) AS year, " +
                 "EXTRACT(MONTH FROM donation_date) AS month, " +
                 "COUNT(*) AS total_donations " +
                 "FROM donation " +
-                "GROUP BY year, month " +
-                "ORDER BY year DESC, month DESC " +
-                "LIMIT 6";
+                "WHERE donation_date >= :startDate " +
+                "GROUP BY year, month";
 
-        List<Object[]> results = entityManager.createNativeQuery(query).getResultList();
+        LocalDate startDate = current.minusMonths(5).atDay(1);
+        List<Object[]> results = entityManager.createNativeQuery(query)
+                .setParameter("startDate", java.sql.Date.valueOf(startDate))
+                .getResultList();
 
-        List<Map<String, Object>> response = new ArrayList<>();
+        // Step 3: Store results in a lookup map
+        Map<String, Integer> donationsMap = new HashMap<>();
         for (Object[] row : results) {
+            int year = ((Number) row[0]).intValue();
+            int month = ((Number) row[1]).intValue();
+            int count = ((Number) row[2]).intValue();
+            donationsMap.put(year + "-" + month, count);
+        }
+
+        // Step 4: Build response with zero where needed
+        for (YearMonth ym : last6Months) {
+            String key = ym.getYear() + "-" + ym.getMonthValue();
             Map<String, Object> map = new HashMap<>();
-            map.put("year", ((Number) row[0]).intValue());
-            map.put("month", ((Number) row[1]).intValue());
-            map.put("total_donations", ((Number) row[2]).intValue());
+            map.put("year", ym.getYear());
+            map.put("month", ym.getMonthValue());
+            map.put("total_donations", donationsMap.getOrDefault(key, 0));
             response.add(map);
         }
 
-        // Sort results chronologically (reverse order)
-        Collections.reverse(response);
-
         return response;
+    }
+
+    public Map<String, Long> getDonationAndAidCount() {
+        long donationCount = donationRepository.count();
+        long aidCount = aidRepository.count();
+
+        Map<String, Long> result = new HashMap<>();
+        result.put("totalDonations", donationCount);
+        result.put("totalAids", aidCount);
+
+        return result;
     }
 }

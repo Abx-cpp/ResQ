@@ -1,5 +1,4 @@
 package com.example.resq_1.users;
-
 import com.example.resq_1.donor.donor;
 import com.example.resq_1.donor.donorService;
 import com.example.resq_1.volunteer.volunteer;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:5173")
 public class usersController {
 
     @Autowired
@@ -179,6 +179,9 @@ public class usersController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response); // Invalid email or password
         }
     }
+
+
+
 
 }
 

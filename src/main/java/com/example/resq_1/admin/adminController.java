@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class adminController {
 
     @Autowired
@@ -31,7 +32,8 @@ public class adminController {
 
     @Autowired
     private donationService donationService;
-
+    @Autowired
+    private donorService donorService;
     @Autowired
     private aidService aidService;
 
@@ -80,6 +82,8 @@ public class adminController {
         List<volunteer> volunteers = volunteerService.getAllVolunteers();
         return new ResponseEntity<>(volunteers, HttpStatus.OK);
     }
+
+
     // show all doantions
     @GetMapping("/donations")
     public ResponseEntity<List<donation>> viewDonations() {
@@ -113,6 +117,12 @@ public class adminController {
         }
     }
 
+    // show all donors and their data
+    @GetMapping("/donors")
+    public ResponseEntity<List<donor>> viewAllDonors() {
+        List<donor> donors = donorService.getAllDonors();
+        return new ResponseEntity<>(donors, HttpStatus.OK);
+    }
 
 
 

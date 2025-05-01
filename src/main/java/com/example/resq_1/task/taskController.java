@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@CrossOrigin(origins = "http://localhost:5173")
 public class taskController {
 
     private final taskService taskService;
